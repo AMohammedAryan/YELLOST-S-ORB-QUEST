@@ -10,10 +10,10 @@ var platform, platform_image;
 
 var fire, fire_image, fire_left, fire_right, yellowFire, yellowFire_image, yellowFire_left, yellowFire_right;
 
-var fireGroup;
+var attackGroup;
 var yellowAttackGroup;
 
-var enemyState;
+var biethState;
 var playerState;
 
 var biethRange = 1200;
@@ -21,6 +21,9 @@ var biethRange = 1200;
 var biethActivate = "no";
 
 var sword, sword_leftImage, sword_rightImage, swordState;
+var yellostSwordAchieved;
+
+var yellostHP, biethHP;
 
 function preload()
 {
@@ -61,11 +64,11 @@ function preload()
 };
 
 function setup() {
-	createCanvas(6000, 4000);
+	createCanvas(windowWidth, windowHeight);
 
 	//Create the Bodies Here.
 
-	invisibleGround = createSprite(width/2, 3700, width, 100);
+	invisibleGround = createSprite(width/2, height - height/4, width *2, 100);
 
 	platform = createSprite(width/2, 2700, 2500, 100);
 	//platform.addImage(platform_image);
@@ -73,26 +76,34 @@ function setup() {
 
 	invisibleGround.debug = true;
 
-	bieth = createSprite(width/2, 3700, 200, 200);
+	bieth = createSprite(width/2, invisibleGround.y - 101, 200, 200);
 	bieth.addImage(bieth_left);
-	enemyState = "facingLeft";
+	biethState = "facingLeft";
 	bieth.scale = 3;
 
 	bieth.setCollider("rectangle", -15, 0, 360, 360);
 
 	bieth.debug = true;
 
-	yellost = createSprite(700, 3600, 50, 50);
+	biethHP = 10;
+
+	yellost = createSprite(200, invisibleGround.y - 26, 50, 50);
 	
-	yellost.addImage(yellost_neutral);
+    yellost.addImage(yellost_neutral);
+	yellost.scale = 0.8;
 
 	yellost.debug = true;
 
-	fireGroup = new Group();
+	yellostHP = 3;
+
+	attackGroup = new Group();
 	yellowAttackGroup = new Group();
 
 	sword = createSprite(width/2, 300, 30, 30);
 	swordState = "facingLeft";
+	yellostSwordAchieved = "yes";
+
+	sword.debug = true;
 }
 
 
@@ -107,11 +118,15 @@ function draw() {
   yellost.collide(invisibleGround);
   bieth.collide(invisibleGround);
 
+  yellost.bounce(bieth);
+
   sword.y = yellost.y;
 
   updateSwordImage();
 
   sword.scale = 0.35;
+
+  strikeSword();
 
   bieth_attack();
 
@@ -121,6 +136,11 @@ function draw() {
   }
 
   bieth_follow();
+
+  updateHP();
+
+  camera.position.x = yellost.x;
+  invisibleGround.x = yellost.x;
 
   drawSprites();
 }
@@ -135,6 +155,12 @@ function addControls(){
 		yellost.x = yellost.x + 50;
 		yellost.debug = true;
 		yellostState = "facingRight";
+	} 
+
+	else{
+
+		yellost.addImage(yellost_neutral);
+		yellost.scale = 0.8;
 	}
 
 	if(keyDown(LEFT_ARROW)){
@@ -151,7 +177,7 @@ function addControls(){
 
 		yellost.addImage(yellost_right);
 		yellost.setCollider("rectangle", 0, 0, yellost.height * 1.8, yellost.height * 1.8);
-		yellost.scale = 0.4;
+		yellost.scale = 0.3;
 		yellost.x = yellost.x + 200;
 		yellostState = "facingRight";
 	}
@@ -183,7 +209,7 @@ function bieth_attack(){
 			case 1: fire = createSprite(-300, bieth.y + 50, 100, 100);
 					fire.addImage(fire_image);
 					
-					if(enemyState === "facingLeft"){
+					if(biethState === "facingLeft"){
 
 						fire.x = bieth.x - 1000;
 
@@ -193,7 +219,7 @@ function bieth_attack(){
 						
 					}
 
-					else if(enemyState === "facingRight"){
+					else if(biethState === "facingRight"){
 
 						fire.x = bieth.x + 1000;
 
@@ -202,16 +228,18 @@ function bieth_attack(){
 						fire.scale = 0.6;
 					}
 
-					fire.lifetime = 25;
+					fire.lifetime = 50;
 
-					fireGroup.add(fire);
+					attackGroup.add(fire);
 
 			break;
 
 			case 2: yellowFire = createSprite(-300, bieth.y + 50, 100, 100);
 					yellowFire.addImage(yellowFire_image);
 
-					if(enemyState === "facingLeft"){
+					yellowFire.debug = "true";
+
+					if(biethState === "facingLeft"){
 
 						yellowFire.x = bieth.x - 1000;
 
@@ -220,7 +248,7 @@ function bieth_attack(){
 						yellowFire.scale = 0.6;
 					}
 
-					else if(enemyState === "facingRight"){
+					else if(biethState === "facingRight"){
 
 						yellowFire.x = bieth.x + 1000;
 
@@ -229,9 +257,10 @@ function bieth_attack(){
 						yellost.scale = 0.6;
 					}
 
-				    yellowFire.lifetime = 25;
+					yellowFire.lifetime = 50;
 			
 					yellowAttackGroup.add(yellowFire);
+					attackGroup.add(yellowFire);
 
 				break;
 			
@@ -249,14 +278,15 @@ function bieth_follow(){
 			bieth.addImage(bieth_right);
 			bieth.scale = 1.2;
 			bieth.velocityX = 50;
-			enemyState = "facingRight";
+			biethState = "facingRight";
 
 			console.log(bieth.x + 200);
 		}
 
 		else if(yellost.x < bieth.x + 200 && yellost.x > bieth.x){
 
-			//bieth.addImage(bieth_right);
+			bieth.addImage(bieth_right);
+			bieth.scale = 1.2;
 		}
 
 		if(yellost.x < bieth.x - 200){
@@ -269,7 +299,8 @@ function bieth_follow(){
 
 		else if(yellost.x > bieth.x - 200 && yellost.x > bieth.x){
 
-			//bieth.addImage(bieth_left);
+			bieth.addImage(bieth_left);
+			bieth.scale = 3;
 		}
 	}
 }
@@ -292,3 +323,25 @@ function updateSwordImage(){
 	  swordState = "facingLeft";
 	}
   }
+
+function strikeSword(){
+
+	if(yellowAttackGroup.isTouching(sword) && yellostSwordAchieved === "yes" && keyWentDown("z")){
+
+		yellowAttackGroup.setVelocityXEach = yellowAttackGroup.velocityX * -1;
+		console.log("strikeSwordOn");
+	}
+}
+
+function updateHP(){
+
+	if(attackGroup.isTouching(yellost)){
+
+		yellostHP = yellostHP - 1;
+	}
+	
+	if(yellowAttackGroup.isTouching(bieth)){
+
+		biethHP = biethHP - 1;
+	}
+}
