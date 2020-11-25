@@ -27,40 +27,40 @@ var yellostHP, biethHP;
 
 function preload()
 {
-	yellost_neutral = loadImage("Yellost Standing Still.png");
-	yellost_right = loadImage("Yellost Moving Right.png");
-	yellost_left = loadImage("Yellost Moving Left.png");
+	yellost_neutral = loadImage("Images/Yellost Standing Still.png");
+	yellost_right = loadImage("Images/Yellost Moving Right.png");
+	yellost_left = loadImage("Images/Yellost Moving Left.png");
 
-	BG1 = loadImage("Background For Level 1.png");
+	BG1 = loadImage("Images/Background For Level 1.png");
 
-	platform_image = loadImage("Platform For Level 1.png");
+	platform_image = loadImage("Images/Platform For Level 1.png");
 
-	bieth_left = loadImage("Bieth Looking Left.png");
-	bieth_right = loadImage("Bieth Looking Right.png");
+	bieth_left = loadImage("Images/Bieth Looking Left.png");
+	bieth_right = loadImage("Images/Bieth Looking Right.png");
 
-	fire_image = loadImage("Fire.png");
+	fire_image = loadImage("Images/Fire.png");
 
-	fire_left = loadImage("Fire Moving Left.png");
+	fire_left = loadImage("Images/Fire Moving Left.png");
 
-	fire_right = loadImage("Fire Moving Right.png");
+	fire_right = loadImage("Images/Fire Moving Right.png");
 
-	yellowFire_image = loadImage("Yellow Fire.png");
+	yellowFire_image = loadImage("Images/Yellow Fire.png");
 
-	yellowFire_left = loadImage("Yellow Fire Moving Left.png");
+	yellowFire_left = loadImage("Images/Yellow Fire Moving Left.png");
 
-	yellowFire_right = loadImage("Yellow Fire Moving Right.png");
+	yellowFire_right = loadImage("Images/Yellow Fire Moving Right.png");
 
-	bieth_left_walk1 = loadImage("Bieth Walking left 1.png");
-	bieth_left_walk2 = loadImage("Bieth Walking left 2.png");
+	bieth_left_walk1 = loadImage("Images/Bieth Walking left 1.png");
+	bieth_left_walk2 = loadImage("Images/Bieth Walking left 2.png");
 
-	bieth_right_walk1 = loadImage("Bieth Walking Right 1.png");
-	bieth_right_walk2 = loadImage("Bieth Walking Right 2.png");
+	bieth_right_walk1 = loadImage("Images/Bieth Walking Right 1.png");
+	bieth_right_walk2 = loadImage("Images/Bieth Walking Right 2.png");
 
 	/*bieth_walkingLeft = loadAnimation("Bieth Walking left 1.png", "Bieth Walking left 2.png");
 	bieth_walkingRight = loadAnimation("Bieth Walking Right 1.png", "Bieth Walking Right 2.png");*/
 
-	sword_leftImage = loadImage("Sword Facing Left.png");
-	sword_rightImage = loadImage("Sword Facing Right.png");
+	sword_leftImage = loadImage("Images/Sword Facing Left.png");
+	sword_rightImage = loadImage("Images/Sword Facing Right.png");
 };
 
 function setup() {
@@ -79,9 +79,6 @@ function setup() {
 	bieth = createSprite(width/2, invisibleGround.y - 101, 200, 200);
 	bieth.addImage(bieth_left);
 	biethState = "facingLeft";
-	bieth.scale = 3;
-
-	bieth.setCollider("rectangle", -15, 0, 360, 360);
 
 	bieth.debug = true;
 
@@ -90,7 +87,6 @@ function setup() {
 	yellost = createSprite(200, invisibleGround.y - 26, 50, 50);
 	
     yellost.addImage(yellost_neutral);
-	yellost.scale = 0.8;
 
 	yellost.debug = true;
 
@@ -124,8 +120,6 @@ function draw() {
 
   updateSwordImage();
 
-  sword.scale = 0.35;
-
   strikeSword();
 
   bieth_attack();
@@ -150,8 +144,6 @@ function addControls(){
 	if(keyDown(RIGHT_ARROW)){
 
 		yellost.addImage(yellost_right);
-		yellost.setCollider("rectangle", 0, 0, yellost.height * 1.8, yellost.height * 1.8);
-		yellost.scale = 0.3;
 		yellost.x = yellost.x + 50;
 		yellost.debug = true;
 		yellostState = "facingRight";
@@ -160,14 +152,11 @@ function addControls(){
 	else{
 
 		yellost.addImage(yellost_neutral);
-		yellost.scale = 0.8;
 	}
 
 	if(keyDown(LEFT_ARROW)){
 
 		yellost.addImage(yellost_left);
-		yellost.setCollider("rectangle", 0, 0, yellost.height * 1.8, yellost.height * 1.8);
-		yellost.scale = 0.3;
 		yellost.x = yellost.x- 50;
 		console.log("inside the left if")
 		yellostState = "facingLeft";
@@ -176,8 +165,6 @@ function addControls(){
 	if(keyDown(RIGHT_ARROW) && keyDown("space")){
 
 		yellost.addImage(yellost_right);
-		yellost.setCollider("rectangle", 0, 0, yellost.height * 1.8, yellost.height * 1.8);
-		yellost.scale = 0.3;
 		yellost.x = yellost.x + 200;
 		yellostState = "facingRight";
 	}
@@ -185,8 +172,6 @@ function addControls(){
 	if(keyDown(LEFT_ARROW) && keyDown("space")){
 
 		yellost.addImage(yellost_left);
-		yellost.setCollider("rectangle", 0, 0, yellost.height * 1.8, yellost.height * 1.8);
-		yellost.scale = 0.3;
 		yellost.x = yellost.x - 200;
 		yellostState = "facingLeft"
 	}
@@ -215,8 +200,6 @@ function bieth_attack(){
 
 						fire.addImage(fire_left);
 						fire.velocityX = - 35;
-						fire.scale = 0.6;
-						
 					}
 
 					else if(biethState === "facingRight"){
@@ -225,7 +208,6 @@ function bieth_attack(){
 
 						fire.addImage(fire_right);
 						fire.velocityX = 35;
-						fire.scale = 0.6;
 					}
 
 					fire.lifetime = 50;
@@ -245,7 +227,6 @@ function bieth_attack(){
 
 						yellowFire.addImage(yellowFire_left);
 						yellowFire.velocityX = - 35;
-						yellowFire.scale = 0.6;
 					}
 
 					else if(biethState === "facingRight"){
@@ -254,7 +235,6 @@ function bieth_attack(){
 
 						yellowFire.addImage(yellowFire_right);
 						yellowFire.velocityX = 35;
-						yellost.scale = 0.6;
 					}
 
 					yellowFire.lifetime = 50;
@@ -276,7 +256,6 @@ function bieth_follow(){
 		if(yellost.x > bieth.x){
 
 			bieth.addImage(bieth_right);
-			bieth.scale = 1.2;
 			bieth.velocityX = 50;
 			biethState = "facingRight";
 
@@ -286,13 +265,11 @@ function bieth_follow(){
 		else if(yellost.x < bieth.x + 200 && yellost.x > bieth.x){
 
 			bieth.addImage(bieth_right);
-			bieth.scale = 1.2;
 		}
 
 		if(yellost.x < bieth.x - 200){
 
 			bieth.addImage(bieth_left);
-			bieth.scale = 3;
 			bieth.velocityX = -50;
 			enemyState = "facingLeft";
 		}
@@ -300,7 +277,6 @@ function bieth_follow(){
 		else if(yellost.x > bieth.x - 200 && yellost.x > bieth.x){
 
 			bieth.addImage(bieth_left);
-			bieth.scale = 3;
 		}
 	}
 }
