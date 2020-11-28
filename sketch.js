@@ -76,7 +76,7 @@ function setup() {
 
 	invisibleGround.debug = true;
 
-	bieth = createSprite(width/2, invisibleGround.y - 101, 200, 200);
+	bieth = createSprite(width/2, invisibleGround.y - 101, 50, 50);
 	bieth.addImage(bieth_left);
 	biethState = "facingLeft";
 
@@ -84,7 +84,7 @@ function setup() {
 
 	biethHP = 10;
 
-	yellost = createSprite(200, invisibleGround.y - 26, 50, 50);
+	yellost = createSprite(200, invisibleGround.y - 26, 1000, 1000);
 	
     yellost.addImage(yellost_neutral);
 
